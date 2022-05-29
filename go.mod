@@ -3,7 +3,9 @@ module github.com/ochom/event-utils
 go 1.18
 
 require (
+	github.com/dongri/phonenumber v0.0.0-20220127125919-1e58a2b4cf97
 	github.com/go-redis/redis/v8 v8.11.5
+	github.com/ochom/go-http v1.0.0
 	gorm.io/datatypes v1.0.6
 )
 
