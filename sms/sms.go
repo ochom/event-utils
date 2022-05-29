@@ -19,8 +19,8 @@ type Payload struct {
 	Text  string
 }
 
-// SendSMS ...
-func (p *Payload) SendSMS(ctx context.Context) error {
+// Send ...
+func (p *Payload) Send(ctx context.Context) error {
 
 	sendURL := "http://api.eleza.online/v1/sms/send/"
 
