@@ -1,8 +1,9 @@
-package queue
+package main
 
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"time"
 
@@ -53,6 +54,18 @@ func (q *Queue) Load(ctx context.Context) {
 	}
 
 	q.items = items
+}
+
+// LoadOtherQueues loads all the other keys in this db
+func (q *Queue) LoadOtherQueues(ctx context.Context) []string {
+	items := []string{}
+
+	iter := q.db.Scan(ctx, 0, "*", 0).Iterator()
+	for iter.Next(ctx) {
+		items = append(items, iter.Val())
+	}
+
+	return items
 }
 
 // Len return count of items in queue
@@ -116,25 +129,27 @@ func (q *Queue) Empty(ctx context.Context) {
 	q.Save(ctx)
 }
 
-// func main() {
-// 	log.SetFlags(log.Lshortfile)
-// 	ctx := context.Background()
+func main() {
+	log.SetFlags(log.Lshortfile)
+	ctx := context.Background()
 
-// 	q := NewQueue("localhost:6379", "test-queue")
-// 	q.Load(ctx)
+	// q := NewQueue("localhost:6379", "test-queue")
+	// q.Load(ctx)
+	q := NewQueue("localhost:6379", "")
+	fmt.Println(q.LoadOtherQueues(ctx))
 
-// 	q.Enqueue(ctx, fmt.Sprintf("%v", rand.Intn(10)))
-// 	fmt.Printf("queue %v\n", q.GetAllItems())
+	// q.Enqueue(ctx, fmt.Sprintf("%v", rand.Intn(10)))
+	// fmt.Printf("queue %v\n", q.GetAllItems())
 
-// 	val := q.Dequeue(ctx)
-// 	if val == nil {
-// 		fmt.Print("val is nil\n")
-// 	} else {
-// 		fmt.Printf("val is %v\n", *val)
-// 	}
+	// val := q.Dequeue(ctx)
+	// if val == nil {
+	// 	fmt.Print("val is nil\n")
+	// } else {
+	// 	fmt.Printf("val is %v\n", *val)
+	// }
 
-// 	fmt.Printf("queue %v\n", q.GetAllItems())
-// 	q.Empty(ctx)
-// 	fmt.Printf("queue %v\n", q.GetAllItems())
+	// fmt.Printf("queue %v\n", q.GetAllItems())
+	// q.Empty(ctx)
+	// fmt.Printf("queue %v\n", q.GetAllItems())
 
-// }
+}
