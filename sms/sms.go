@@ -20,7 +20,7 @@ type Payload struct {
 }
 
 // SendSMS ...
-func SendSMS(ctx context.Context, sms Payload) error {
+func (p *Payload) SendSMS(ctx context.Context) error {
 
 	sendURL := "http://api.eleza.online/v1/sms/send/"
 
@@ -40,8 +40,8 @@ func SendSMS(ctx context.Context, sms Payload) error {
 	}
 
 	data := map[string]string{
-		"msisdn":    phonenumber.Parse(sms.Phone, "KE"),
-		"sms":       sms.Text,
+		"msisdn":    phonenumber.Parse(p.Phone, "KE"),
+		"sms":       p.Text,
 		"productID": productID,
 	}
 
