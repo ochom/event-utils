@@ -77,6 +77,7 @@ type EventTicket struct {
 type Payment struct {
 	ID         string    `json:"id,omitempty"`
 	ConsumerID string    `json:"consumerID,omitempty"`
+	Mobile     string    `json:"mobile,omitempty"`
 	EventID    string    `json:"eventID,omitempty"`
 	TicketName string    `json:"ticketID,omitempty"`
 	Quantity   int       `json:"quantity,omitempty"`
