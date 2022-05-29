@@ -17,17 +17,15 @@ type Queue struct {
 }
 
 // NewQueue creates a new instance of Queue
-func NewQueue(redisURL, qName string) *Queue {
-	rdb := redis.NewClient(&redis.Options{
-		Addr:     redisURL,
-		Password: "", // no password set
-		DB:       1,  // use default DB
-	})
-
+func NewQueue(client redis.Client) *Queue {
 	return &Queue{
-		db:   rdb,
-		name: qName,
+		db: &client,
 	}
+}
+
+// SetName sets the name of the queue
+func (q *Queue) SetName(name string) {
+	q.name = name
 }
 
 // Load loads queue items from redis by name/key
@@ -129,12 +127,21 @@ func (q *Queue) Empty(ctx context.Context) {
 }
 
 // func main() {
+// 	redisURL := "localhost:6379"
+// 	client := redis.NewClient(&redis.Options{
+// 		Addr:     redisURL,
+// 		Password: "", // no password set
+// 		DB:       1,  // use default DB
+// 	})
+
 // 	log.SetFlags(log.Lshortfile)
 // 	ctx := context.Background()
 
 // 	// q := NewQueue("localhost:6379", "test-queue")
 // 	// q.Load(ctx)
-// 	q := NewQueue("localhost:6379", "")
+// 	q := NewQueue(*client)
+// 	q.SetName("test-queue")
+
 // 	fmt.Println(q.LoadOtherQueues(ctx))
 
 // 	// q.Enqueue(ctx, fmt.Sprintf("%v", rand.Intn(10)))
