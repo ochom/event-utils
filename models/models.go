@@ -82,6 +82,8 @@ type Payment struct {
 	TicketName string    `json:"ticketID,omitempty"`
 	Quantity   int       `json:"quantity,omitempty"`
 	Amount     int       `json:"amount,omitempty"`
+	Status     string    `json:"status,omitempty"`
+	MerchantID string    `json:"merchantID,omitempty"`
 	Paid       bool      `json:"paid,omitempty"`
 	CreatedAt  time.Time `json:"createdAt,omitempty"`
 	UpdatedAt  time.Time `json:"updatedAt,omitempty"`
