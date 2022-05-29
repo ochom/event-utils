@@ -1,4 +1,4 @@
-module github.com/ochom/redis-queue
+module github.com/ochom/event-utils
 
 go 1.18
 
