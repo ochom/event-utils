@@ -34,7 +34,6 @@ func (q *Queue) Load(ctx context.Context) {
 
 	data, err := q.db.Get(ctx, q.name).Bytes()
 	if err == redis.Nil {
-		log.Println("queue is empty")
 		q.items = items
 		return
 	}
@@ -125,37 +124,3 @@ func (q *Queue) Empty(ctx context.Context) {
 	q.items = []string{}
 	q.Save(ctx)
 }
-
-// func main() {
-// 	redisURL := "localhost:6379"
-// 	client := redis.NewClient(&redis.Options{
-// 		Addr:     redisURL,
-// 		Password: "", // no password set
-// 		DB:       1,  // use default DB
-// 	})
-
-// 	log.SetFlags(log.Lshortfile)
-// 	ctx := context.Background()
-
-// 	// q := NewQueue("localhost:6379", "test-queue")
-// 	// q.Load(ctx)
-// 	q := NewQueue(*client)
-// 	q.SetName("test-queue")
-
-// 	fmt.Println(q.LoadOtherQueues(ctx))
-
-// 	// q.Enqueue(ctx, fmt.Sprintf("%v", rand.Intn(10)))
-// 	// fmt.Printf("queue %v\n", q.GetAllItems())
-
-// 	// val := q.Dequeue(ctx)
-// 	// if val == nil {
-// 	// 	fmt.Print("val is nil\n")
-// 	// } else {
-// 	// 	fmt.Printf("val is %v\n", *val)
-// 	// }
-
-// 	// fmt.Printf("queue %v\n", q.GetAllItems())
-// 	// q.Empty(ctx)
-// 	// fmt.Printf("queue %v\n", q.GetAllItems())
-
-// }
