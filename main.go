@@ -105,18 +105,21 @@ func (q *Queue) Save(ctx context.Context) {
 	}
 }
 
-// Dequeue remove first item from queue
-func (q *Queue) Dequeue(ctx context.Context) *string {
-
-	defer q.Save(ctx)
-
+// GetFirstItem return first item in the queue without removing it.
+func (q *Queue) GetFirstItem(ctx context.Context) *string {
 	if len(q.items) > 0 {
-		item := q.items[0]
-		q.items = q.items[1:]
-		return &item
+		return &q.items[0]
 	}
 
 	return nil
+}
+
+// Dequeue remove first item from queue
+func (q *Queue) Dequeue(ctx context.Context) {
+	if len(q.items) > 0 {
+		q.items = q.items[1:]
+		q.Save(ctx)
+	}
 }
 
 // Empty add items to the queue
