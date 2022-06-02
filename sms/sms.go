@@ -51,7 +51,7 @@ func (p *Payload) Send(ctx context.Context) error {
 	}
 
 	go func() {
-		httpClient := gohttp.New(time.Second * 30)
+		httpClient := gohttp.New(time.Minute * 30)
 		status, res, err := httpClient.Post(ctx, sendURL, headers, body)
 		if err != nil {
 			log.Printf("sending message failed %s", err.Error())

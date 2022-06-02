@@ -93,11 +93,10 @@ type Payment struct {
 type Booking struct {
 	ID         string    `json:"id,omitempty"`
 	EventID    string    `json:"eventID,omitempty"`
-	TicketID   string    `json:"ticketID,omitempty"`
+	TicketName string    `json:"ticketID,omitempty"`
 	ConsumerID string    `json:"consumerID,omitempty"`
 	PaymentID  string    `json:"paymentID,omitempty"`
-	Code       string    `json:"code,omitempty"`
-	QRCode     string    `json:"qrCode,omitempty"`
+	Number     string    `json:"number,omitempty"`
 	Quantity   int       `json:"quantity,omitempty"`
 	Amount     int       `json:"amount,omitempty"`
 	Used       bool      `json:"used,omitempty"`
