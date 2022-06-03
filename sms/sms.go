@@ -51,6 +51,7 @@ func (p *Payload) Send(ctx context.Context) error {
 	}
 
 	go func() {
+		log.Printf(`{message: %v}`, data)
 		httpClient := gohttp.New(time.Minute * 30)
 		status, res, err := httpClient.Post(ctx, sendURL, headers, body)
 		if err != nil {
