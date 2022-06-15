@@ -73,30 +73,51 @@ type EventTicket struct {
 	Deadline time.Time `json:"deadline,omitempty"`
 }
 
+// PaymentStatus ...
+type PaymentStatus string
+
+const (
+	// Waiting ...
+	Waiting PaymentStatus = "Waiting"
+
+	// Processing ...
+	Processing PaymentStatus = "Processing"
+
+	// Failed ...
+	Failed PaymentStatus = "Failed"
+
+	// Cancelled ...
+	Cancelled PaymentStatus = "Cancelled"
+
+	// Completed ...
+	Completed PaymentStatus = "Completed"
+)
+
 // Payment ...
 type Payment struct {
-	ID         string    `json:"id,omitempty"`
-	ConsumerID string    `json:"consumerID,omitempty"`
-	Mobile     string    `json:"mobile,omitempty"`
-	EventID    string    `json:"eventID,omitempty"`
-	TicketName string    `json:"ticketID,omitempty"`
-	Quantity   int       `json:"quantity,omitempty"`
-	Amount     int       `json:"amount,omitempty"`
-	Status     string    `json:"status,omitempty"`
-	MerchantID string    `json:"merchantID,omitempty"`
-	Paid       bool      `json:"paid,omitempty"`
-	CreatedAt  time.Time `json:"createdAt,omitempty"`
-	UpdatedAt  time.Time `json:"updatedAt,omitempty"`
+	ID                string        `json:"id,omitempty"`
+	ConsumerID        string        `json:"consumerID,omitempty"`
+	Mobile            string        `json:"mobile,omitempty"`
+	EventID           string        `json:"eventID,omitempty"`
+	TicketName        string        `json:"ticketID,omitempty"`
+	Quantity          int           `json:"quantity,omitempty"`
+	Amount            int           `json:"amount,omitempty"`
+	Status            PaymentStatus `json:"status,omitempty"`
+	StatusDescription string        `json:"statusDescription,omitempty"`
+	MerchantID        string        `json:"merchantID,omitempty"`
+	Paid              bool          `json:"paid,omitempty"`
+	CreatedAt         time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt         time.Time     `json:"updatedAt,omitempty"`
 }
 
 // Booking ...
 type Booking struct {
 	ID         string    `json:"id,omitempty"`
 	EventID    string    `json:"eventID,omitempty"`
-	TicketName string    `json:"ticketID,omitempty"`
+	TicketName string    `json:"ticketID,omitempty" gorm:"uniqueIndex:idx_tk_name_number"`
 	ConsumerID string    `json:"consumerID,omitempty"`
 	PaymentID  string    `json:"paymentID,omitempty"`
-	Number     string    `json:"number,omitempty"`
+	Number     int       `json:"number,omitempty" gorm:"uniqueIndex:idx_tk_name_number"`
 	Quantity   int       `json:"quantity,omitempty"`
 	Amount     int       `json:"amount,omitempty"`
 	Used       bool      `json:"used,omitempty"`
