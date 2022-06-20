@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"gorm.io/datatypes"
-	"gorm.io/gorm"
 )
 
 // Event ...
@@ -115,7 +114,7 @@ type Payment struct {
 type Booking struct {
 	ID         string    `json:"id,omitempty"`
 	EventID    string    `json:"eventID,omitempty" gorm:"uniqueIndex:idx_tk_name_number"`
-	TicketName string    `json:"ticketID,omitempty" gorm:"uniqueIndex:idx_tk_name_number"`
+	TicketName string    `json:"ticketName,omitempty" gorm:"uniqueIndex:idx_tk_name_number"`
 	ConsumerID string    `json:"consumerID,omitempty"`
 	PaymentID  string    `json:"paymentID,omitempty"`
 	Number     int       `json:"number,omitempty" gorm:"uniqueIndex:idx_tk_name_number"`
@@ -124,16 +123,4 @@ type Booking struct {
 	Used       bool      `json:"used,omitempty"`
 	CreatedAt  time.Time `json:"createdAt,omitempty"`
 	UpdatedAt  time.Time `json:"updatedAt,omitempty"`
-}
-
-// BeforeCreate assign ticket number before create
-func (b *Booking) BeforeCreate(tx *gorm.DB) (err error) {
-	var tkNumber int
-	err = tx.Raw("SELECT COUNT(*) AS tkNumber FROM bookings WHERE event_id = ? AND ticketName = ?", b.EventID, b.TicketName).Scan(&tkNumber).Error
-	if err != nil {
-		return err
-	}
-
-	b.Number = tkNumber + 1
-	return err
 }
