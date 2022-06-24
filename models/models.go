@@ -13,7 +13,8 @@ type Event struct {
 	ID             string         `json:"id,omitempty"`
 	OrganizationID string         `json:"organizationID,omitempty"`
 	Name           string         `json:"name,omitempty"`
-	Image          string         `json:"image,omitempty"`
+	PromotionImage string         `json:"promotionImage,omitempty"`
+	BannerImage    string         `json:"bannerImage,omitempty"`
 	Category       string         `json:"category,omitempty"`
 	Description    string         `json:"description,omitempty"`
 	Venue          string         `json:"venue,omitempty"`
