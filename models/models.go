@@ -100,7 +100,7 @@ type Payment struct {
 	ConsumerID        string        `json:"consumerID,omitempty"`
 	Mobile            string        `json:"mobile,omitempty"`
 	EventID           string        `json:"eventID,omitempty"`
-	TicketName        string        `json:"ticketID,omitempty"`
+	TicketName        string        `json:"ticketName,omitempty"`
 	Quantity          int           `json:"quantity,omitempty"`
 	Amount            int           `json:"amount,omitempty"`
 	Status            PaymentStatus `json:"status,omitempty"`
