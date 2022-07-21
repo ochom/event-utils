@@ -15,8 +15,9 @@ import (
 
 // Payload payload use to send messages
 type Payload struct {
-	Phone string
-	Text  string
+	Phone  string
+	Text   string
+	LinkID string
 }
 
 // Send ...
@@ -51,20 +52,65 @@ func (p *Payload) Send(ctx context.Context) error {
 	}
 
 	go func() {
-		log.Printf(`{message: %v}`, data)
 		httpClient := gohttp.New(time.Minute * 30)
-		status, res, err := httpClient.Post(ctx, sendURL, headers, body)
+		status, _, err := httpClient.Post(ctx, sendURL, headers, body)
 		if err != nil {
-			log.Printf("sending message failed %s", err.Error())
+			log.Println(p.Phone, "sending message failed ", err.Error())
 			return
 		}
 
 		if status != http.StatusOK {
-			log.Printf("message failed status %v", status)
+			log.Println(p.Phone, "message failed status ", status)
+			return
+		}
+	}()
+	return nil
+}
+
+// Reply ...
+func (p *Payload) Reply(ctx context.Context) error {
+
+	sendURL := "http://api.eleza.online/v1/sms/reply/"
+
+	token, err := helpers.MustGetEnv("ELEZA_SMS_TOKEN")
+	if err != nil {
+		return err
+	}
+
+	offerCode, err := helpers.MustGetEnv("ELEZA_OFFER_CODE")
+	if err != nil {
+		return err
+	}
+
+	headers := map[string]string{
+		"Content-Type": "application/json",
+		"X-Token":      token,
+	}
+
+	data := map[string]string{
+		"msisdn":    phonenumber.Parse(p.Phone, "KE"),
+		"sms":       p.Text,
+		"link_id":   p.LinkID,
+		"offercode": offerCode,
+	}
+
+	body, err := json.Marshal(data)
+	if err != nil {
+		return fmt.Errorf("json marshal err: %v", err)
+	}
+
+	go func() {
+		httpClient := gohttp.New(time.Minute * 30)
+		status, _, err := httpClient.Post(ctx, sendURL, headers, body)
+		if err != nil {
+			log.Println(p.Phone, "sending message failed ", err.Error())
 			return
 		}
 
-		log.Printf("message sent response %s", string(res))
+		if status != http.StatusOK {
+			log.Println(p.Phone, "message failed status ", status)
+			return
+		}
 	}()
 	return nil
 }
