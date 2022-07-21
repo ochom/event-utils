@@ -7,6 +7,7 @@ require (
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/ochom/go-http v1.0.0
 	gorm.io/datatypes v1.0.6
+	gorm.io/gorm v1.23.2
 )
 
 require (
@@ -16,5 +17,4 @@ require (
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.4 // indirect
 	gorm.io/driver/mysql v1.3.2 // indirect
-	gorm.io/gorm v1.23.2 // indirect
 )

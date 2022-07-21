@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"gorm.io/datatypes"
+	"gorm.io/gorm"
 )
 
 // Event ...
@@ -27,6 +28,7 @@ type Event struct {
 	Tickets        datatypes.JSON `json:"tickets,omitempty"`
 	CreatedAt      time.Time      `json:"createdAt,omitempty"`
 	UpdatedAt      time.Time      `json:"updatedAt,omitempty"`
+	DeletedAt      gorm.DeletedAt `json:"deletedAt,omitempty"`
 }
 
 // SetTickets ...
@@ -96,33 +98,35 @@ const (
 
 // Payment ...
 type Payment struct {
-	ID                string        `json:"id,omitempty"`
-	ConsumerID        string        `json:"consumerID,omitempty"`
-	Mobile            string        `json:"mobile,omitempty"`
-	EventID           string        `json:"eventID,omitempty"`
-	EventName         string        `json:"eventName,omitempty"`
-	TicketName        string        `json:"ticketName,omitempty"`
-	Quantity          int           `json:"quantity,omitempty"`
-	Amount            int           `json:"amount,omitempty"`
-	Status            PaymentStatus `json:"status,omitempty"`
-	StatusDescription string        `json:"statusDescription,omitempty"`
-	MerchantID        string        `json:"merchantID,omitempty"`
-	Paid              bool          `json:"paid,omitempty"`
-	CreatedAt         time.Time     `json:"createdAt,omitempty"`
-	UpdatedAt         time.Time     `json:"updatedAt,omitempty"`
+	ID                string         `json:"id,omitempty"`
+	ConsumerID        string         `json:"consumerID,omitempty"`
+	Mobile            string         `json:"mobile,omitempty"`
+	EventID           string         `json:"eventID,omitempty"`
+	EventName         string         `json:"eventName,omitempty"`
+	TicketName        string         `json:"ticketName,omitempty"`
+	Quantity          int            `json:"quantity,omitempty"`
+	Amount            int            `json:"amount,omitempty"`
+	Status            PaymentStatus  `json:"status,omitempty"`
+	StatusDescription string         `json:"statusDescription,omitempty"`
+	MerchantID        string         `json:"merchantID,omitempty"`
+	Paid              bool           `json:"paid,omitempty"`
+	CreatedAt         time.Time      `json:"createdAt,omitempty"`
+	UpdatedAt         time.Time      `json:"updatedAt,omitempty"`
+	DeletedAt         gorm.DeletedAt `json:"deletedAt,omitempty"`
 }
 
 // Booking ...
 type Booking struct {
-	ID         string    `json:"id,omitempty"`
-	EventID    string    `json:"eventID,omitempty" gorm:"uniqueIndex:idx_tk_name_number"`
-	TicketName string    `json:"ticketName,omitempty" gorm:"uniqueIndex:idx_tk_name_number"`
-	ConsumerID string    `json:"consumerID,omitempty"`
-	PaymentID  string    `json:"paymentID,omitempty"`
-	Number     int       `json:"number,omitempty" gorm:"uniqueIndex:idx_tk_name_number"`
-	Quantity   int       `json:"quantity,omitempty"`
-	Amount     int       `json:"amount,omitempty"`
-	Used       bool      `json:"used,omitempty"`
-	CreatedAt  time.Time `json:"createdAt,omitempty"`
-	UpdatedAt  time.Time `json:"updatedAt,omitempty"`
+	ID         string         `json:"id,omitempty"`
+	EventID    string         `json:"eventID,omitempty" gorm:"uniqueIndex:idx_tk_name_number"`
+	TicketName string         `json:"ticketName,omitempty" gorm:"uniqueIndex:idx_tk_name_number"`
+	ConsumerID string         `json:"consumerID,omitempty"`
+	PaymentID  string         `json:"paymentID,omitempty"`
+	Number     int            `json:"number,omitempty" gorm:"uniqueIndex:idx_tk_name_number"`
+	Quantity   int            `json:"quantity,omitempty"`
+	Amount     int            `json:"amount,omitempty"`
+	Used       bool           `json:"used,omitempty"`
+	CreatedAt  time.Time      `json:"createdAt,omitempty"`
+	UpdatedAt  time.Time      `json:"updatedAt,omitempty"`
+	DeletedAt  gorm.DeletedAt `json:"deletedAt,omitempty"`
 }
