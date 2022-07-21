@@ -1,4 +1,4 @@
-package compressor
+package cpr
 
 import (
 	"bytes"
@@ -7,6 +7,8 @@ import (
 	"image/color"
 	"image/draw"
 	"image/jpeg"
+
+	_ "image/png" // register png decoder
 	"regexp"
 )
 
