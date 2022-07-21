@@ -68,10 +68,10 @@ func (e *Event) GetTicket(name string) (*EventTicket, error) {
 
 // EventTicket ...
 type EventTicket struct {
-	Name     string    `json:"name,omitempty"`
-	Cost     int       `json:"cost,omitempty"`
-	Slots    int       `json:"slots,omitempty"`
-	Deadline time.Time `json:"deadline,omitempty"`
+	Name     string    `json:"name"`
+	Cost     int       `json:"cost"`
+	Slots    int       `json:"slots"`
+	Deadline time.Time `json:"deadline"`
 }
 
 // PaymentStatus ...
