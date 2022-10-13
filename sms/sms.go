@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/dongri/phonenumber"
-	"github.com/ochom/event-utils/helpers"
 	gohttp "github.com/ochom/go-http"
+	"github.com/ochom/sdp-lib/utils"
 )
 
 // Payload payload use to send messages
@@ -25,15 +25,8 @@ func (p *Payload) Send(ctx context.Context) error {
 
 	sendURL := "http://api.eleza.online/v1/sms/send/"
 
-	token, err := helpers.MustGetEnv("ELEZA_SMS_TOKEN")
-	if err != nil {
-		return err
-	}
-
-	productID, err := helpers.MustGetEnv("ELEZA_PRODUCT_ID")
-	if err != nil {
-		return err
-	}
+	token := utils.MustGetEnv("ELEZA_SMS_TOKEN")
+	productID := utils.MustGetEnv("ELEZA_PRODUCT_ID")
 
 	headers := map[string]string{
 		"Content-Type": "application/json",
@@ -72,15 +65,8 @@ func (p *Payload) Reply(ctx context.Context) error {
 
 	sendURL := "http://api.eleza.online/v1/sms/reply/"
 
-	token, err := helpers.MustGetEnv("ELEZA_SMS_TOKEN")
-	if err != nil {
-		return err
-	}
-
-	offerCode, err := helpers.MustGetEnv("ELEZA_OFFER_CODE")
-	if err != nil {
-		return err
-	}
+	token := utils.MustGetEnv("ELEZA_SMS_TOKEN")
+	offerCode := utils.MustGetEnv("ELEZA_OFFER_CODE")
 
 	headers := map[string]string{
 		"Content-Type": "application/json",
