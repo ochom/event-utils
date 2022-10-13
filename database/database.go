@@ -32,11 +32,11 @@ $$
   END;
 $$;
 
-CREATE TRIGGER count_tickets_trigger 
+CREATE OR REPLACE count_tickets_trigger 
   BEFORE INSERT on public.bookings
   FOR EACH ROW
   EXECUTE PROCEDURE count_tickets();
-	`
+`
 
 // Repository ...
 type Repository interface {
