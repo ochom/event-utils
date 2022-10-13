@@ -125,7 +125,7 @@ type Booking struct {
 	ConsumerID   string         `json:"consumerID,omitempty"`
 	CustomerName string         `json:"customerName,omitempty"`
 	PaymentID    string         `json:"paymentID,omitempty"`
-	TicketNumber int64          `json:"ticketNumber,omitempty" gorm:"uniqueIndex,autoIncrement:true"`
+	TicketNumber int64          `json:"ticketNumber,omitempty"`
 	Quantity     int            `json:"quantity,omitempty"`
 	Amount       int            `json:"amount,omitempty"`
 	Used         bool           `json:"used,omitempty"`

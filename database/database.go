@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/ochom/event-utils/models"
@@ -16,32 +17,29 @@ type impl struct {
 	db *gorm.DB
 }
 
-func initDB() (*gorm.DB, error) {
-	dns := utils.MustGetEnv("DATABASE_DNS")
+const triggerQuery = `
+CREATE OR REPLACE FUNCTION count_tickets() 
+  RETURNS TRIGGER
+  LANGUAGE PLPGSQL
+AS 
+$$
+  DECLARE
+    total int;
+  BEGIN
+    SELECT count(*) + 1  INTO total FROM bookings t WHERE t.event_id=NEW.event_id AND t.ticket_name=NEW.ticket_name;
+    NEW.ticket_number := total;
+    return NEW;
+  END;
+$$;
 
-	db, err := gorm.Open(postgres.Open(dns), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Warn),
-		NowFunc: func() time.Time {
-			return time.Now().Local()
-		},
-		DisableForeignKeyConstraintWhenMigrating: true,
-	})
+DROP TRIGGER IF EXISTS count_tickets_trigger
+  ON public.bookings;
 
-	return db, err
-}
-
-func migrateDB(db *gorm.DB) error {
-	err := db.AutoMigrate(
-		&models.Organization{},
-		&models.Event{},
-		&models.User{},
-		&models.Consumer{},
-		&models.Payment{},
-		&models.Booking{},
-	)
-
-	return err
-}
+CREATE TRIGGER count_tickets_trigger 
+  BEFORE INSERT on public.bookings
+  FOR EACH ROW
+  EXECUTE PROCEDURE count_tickets();
+`
 
 // Repository ...
 type Repository interface {
@@ -79,13 +77,37 @@ type Repository interface {
 
 // New creates a new Database instance for repository
 func New() (Repository, error) {
-	db, err := initDB()
+	dns := utils.MustGetEnv("DATABASE_DNS")
+
+	db, err := gorm.Open(postgres.Open(dns), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Warn),
+		NowFunc: func() time.Time {
+			return time.Now().Local()
+		},
+		DisableForeignKeyConstraintWhenMigrating: true,
+	})
+
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to connect to database: %w", err)
 	}
 
-	if err = migrateDB(db); err != nil {
-		return nil, err
+	err = db.AutoMigrate(
+		&models.Organization{},
+		&models.Event{},
+		&models.User{},
+		&models.Consumer{},
+		&models.Payment{},
+		&models.Booking{},
+	)
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to migrate database: %w", err)
+	}
+
+	// create trigger
+	err = db.Exec(triggerQuery).Error
+	if err != nil {
+		return nil, fmt.Errorf("failed to create trigger: %w", err)
 	}
 
 	return &impl{db}, nil
