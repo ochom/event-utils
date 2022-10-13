@@ -40,3 +40,25 @@ func (r *impl) GetPayments(ctx context.Context, query models.Payment) ([]*models
 
 	return data, nil
 }
+
+func (r *impl) GetDistinctPayments(ctx context.Context) ([][]string, error) {
+
+	type pair struct {
+		EventID    string `gorm:"column:event_id"`
+		TicketName string `gorm:"column:ticket_name"`
+	}
+
+	data := []pair{}
+
+	err := r.db.Raw("SELECT event_id, ticket_name FROM payments WHERE status = ? GROUP BY event_id, ticket_name", models.Waiting).Scan(&data).Error
+	if err != nil {
+		return nil, err
+	}
+
+	resp := [][]string{}
+	for _, v := range data {
+		resp = append(resp, []string{v.EventID, v.TicketName})
+	}
+
+	return resp, nil
+}

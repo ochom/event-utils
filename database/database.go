@@ -68,6 +68,7 @@ type Repository interface {
 	DeletePayment(ctx context.Context, query models.Payment) error
 	GetPayment(ctx context.Context, query models.Payment) (*models.Payment, error)
 	GetPayments(ctx context.Context, query models.Payment) ([]*models.Payment, error)
+	GetDistinctPayments(ctx context.Context) ([][]string, error)
 
 	CreateOrUpdateBooking(ctx context.Context, data models.Booking) error
 	DeleteBooking(ctx context.Context, query models.Booking) error
