@@ -27,7 +27,7 @@ $$
     total int;
   BEGIN
     SELECT count(*) + 1  INTO total FROM bookings t WHERE t.event_id=NEW.event_id AND t.ticket_name=NEW.ticket_name;
-    NEW.number := total;
+    NEW.ticket_number := total;
     return NEW;
   END;
 $$;
