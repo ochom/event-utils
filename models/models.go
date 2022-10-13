@@ -120,12 +120,12 @@ type Payment struct {
 // Booking ...
 type Booking struct {
 	ID           string         `json:"id,omitempty"`
-	EventID      string         `json:"eventID,omitempty" gorm:"uniqueIndex:idx_tk_name_number"`
-	TicketName   string         `json:"ticketName,omitempty" gorm:"uniqueIndex:idx_tk_name_number"`
+	EventID      string         `json:"eventID,omitempty"`
+	TicketName   string         `json:"ticketName,omitempty"`
 	ConsumerID   string         `json:"consumerID,omitempty"`
 	CustomerName string         `json:"customerName,omitempty"`
 	PaymentID    string         `json:"paymentID,omitempty"`
-	TicketNumber int            `json:"ticketNumber,omitempty" gorm:"column:number,uniqueIndex:idx_tk_name_number"`
+	TicketNumber int64          `json:"ticketNumber,omitempty" gorm:"uniqueIndex,autoIncrement:true"`
 	Quantity     int            `json:"quantity,omitempty"`
 	Amount       int            `json:"amount,omitempty"`
 	Used         bool           `json:"used,omitempty"`
