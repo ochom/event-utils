@@ -32,7 +32,10 @@ $$
   END;
 $$;
 
-CREATE OR REPLACE  TRIGGER count_tickets_trigger 
+DROP TRIGGER IF EXISTS count_tickets_trigger
+  ON public.bookings;
+
+CREATE TRIGGER count_tickets_trigger 
   BEFORE INSERT on public.bookings
   FOR EACH ROW
   EXECUTE PROCEDURE count_tickets();
