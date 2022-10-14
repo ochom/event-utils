@@ -32,40 +32,37 @@ type Event struct {
 }
 
 // SetTickets ...
-func (e *Event) SetTickets(data []EventTicket) error {
+func (e *Event) SetTickets(data []EventTicket) {
 	b, err := json.Marshal(data)
 	if err != nil {
-		return err
+		fmt.Printf("error marshalling tickets: %v", err)
+		return
 	}
 	e.Tickets = b
 
-	return nil
 }
 
 // GetTickets ...
-func (e *Event) GetTickets() ([]*EventTicket, error) {
+func (e *Event) GetTickets() []*EventTicket {
 	data := []*EventTicket{}
 	if err := json.Unmarshal(e.Tickets, &data); err != nil {
-		return nil, err
+		fmt.Printf("error unmarshalling tickets: %v", err)
+		return nil
 	}
 
-	return data, nil
+	return data
 }
 
 // GetTicket gets one ticket by name
-func (e *Event) GetTicket(name string) (*EventTicket, error) {
-	tickets, err := e.GetTickets()
-	if err != nil {
-		return nil, err
-	}
-
-	for _, v := range tickets {
-		if v.Name == name {
-			return v, nil
+func (e *Event) GetTicket(name string) *EventTicket {
+	tickets := e.GetTickets()
+	for _, ticket := range tickets {
+		if ticket.Name == name {
+			return ticket
 		}
 	}
 
-	return nil, fmt.Errorf("ticket `%s` not found", name)
+	return nil
 }
 
 // EventTicket ...
