@@ -10,7 +10,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
-	"github.com/ochom/sdp-lib/utils"
+	"github.com/ochom/event-utils/utils"
 	"golang.org/x/crypto/bcrypt"
 )
 
