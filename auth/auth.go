@@ -20,7 +20,7 @@ type ContextKey string
 //ContextUser ...
 const ContextUser ContextKey = "user"
 
-var secreteKey string = utils.GetEnvOrDefault("AUTH_SECRETE_KEY", "nmU9AHJEyhZODIWT4sLBZtCX3k6fGhEY")
+var secreteKey string = utils.GetEnvOrDefault("AUTH_SECRETE_KEY", "")
 
 //SignedDetails ...
 type SignedDetails struct {

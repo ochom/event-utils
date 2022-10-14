@@ -1,37 +1,28 @@
 package database
 
 import (
-	"context"
-	"fmt"
-
 	"github.com/ochom/event-utils/models"
 )
 
-func (r *impl) CreateOrUpdateBooking(ctx context.Context, data models.Booking) error {
-	err := r.db.Save(&data).Error
+func (r *impl) CreateOrUpdateBooking(data *models.Booking) error {
+	err := r.db.Save(data).Error
 	return err
 }
 
-func (r *impl) DeleteBooking(ctx context.Context, query models.Booking) error {
+func (r *impl) DeleteBooking(query *models.Booking) error {
 	err := r.db.Where(query).Delete(&models.Booking{}).Error
 	return err
 }
 
-func (r *impl) GetBooking(ctx context.Context, query models.Booking) (*models.Booking, error) {
-	data := []*models.Booking{}
-	err := r.db.Where(query).Find(&data).Error
-	if err != nil {
+func (r *impl) GetBooking(query *models.Booking) (*models.Booking, error) {
+	var data models.Booking
+	if err := r.db.Where(query).First(&data).Error; err != nil {
 		return nil, err
 	}
-
-	if len(data) == 0 {
-		return nil, fmt.Errorf("booking data matching query not found")
-	}
-
-	return data[0], nil
+	return &data, nil
 }
 
-func (r *impl) GetBookings(ctx context.Context, query models.Booking) ([]*models.Booking, error) {
+func (r *impl) GetBookings(query *models.Booking) ([]*models.Booking, error) {
 	data := []*models.Booking{}
 	err := r.db.Where(query).Order("created_at desc").Find(&data).Error
 	if err != nil {

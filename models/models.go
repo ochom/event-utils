@@ -114,7 +114,6 @@ type Payment struct {
 	CreatedAt         time.Time      `json:"createdAt,omitempty"`
 	UpdatedAt         time.Time      `json:"updatedAt,omitempty"`
 	DeletedAt         gorm.DeletedAt `json:"deletedAt,omitempty"`
-	Event             Event          `json:"event,omitempty" gorm:"-"`
 }
 
 // Booking ...

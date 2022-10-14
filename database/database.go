@@ -1,21 +1,29 @@
 package database
 
 import (
-	"context"
 	"fmt"
-	"time"
 
 	"github.com/ochom/event-utils/models"
 	"github.com/ochom/event-utils/utils"
 	"gorm.io/driver/postgres"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 )
 
 // impl implements the database using postgres
 type impl struct {
 	db *gorm.DB
 }
+
+// DBKind database kind e.g postgres, sqlite
+type DBKind string
+
+const (
+	// Postgres is the postgres database
+	Postgres DBKind = "postgres"
+	// SQLite is the sqlite database
+	SQLite DBKind = "sqlite"
+)
 
 const triggerQuery = `
 CREATE OR REPLACE FUNCTION count_tickets() 
@@ -43,52 +51,58 @@ CREATE TRIGGER count_tickets_trigger
 
 // Repository ...
 type Repository interface {
-	CreateOrUpdateOrganization(ctx context.Context, data models.Organization) error
-	DeleteOrganization(ctx context.Context, query models.Organization) error
-	GetOrganization(ctx context.Context, query models.Organization) (*models.Organization, error)
-	GetOrganizations(ctx context.Context, query models.Organization) ([]*models.Organization, error)
+	CreateOrUpdateOrganization(data *models.Organization) error
+	DeleteOrganization(query *models.Organization) error
+	GetOrganization(query *models.Organization) (*models.Organization, error)
+	GetOrganizations(query *models.Organization) ([]*models.Organization, error)
 
-	CreateOrUpdateUser(ctx context.Context, data models.User) error
-	DeleteUser(ctx context.Context, query models.User) error
-	GetUser(ctx context.Context, query models.User) (*models.User, error)
-	GetUsers(ctx context.Context, query models.User) ([]*models.User, error)
+	CreateOrUpdateUser(data *models.User) error
+	DeleteUser(query *models.User) error
+	GetUser(query *models.User) (*models.User, error)
+	GetUsers(query *models.User) ([]*models.User, error)
 
-	CreateOrUpdateConsumer(ctx context.Context, data models.Consumer) error
-	DeleteConsumer(ctx context.Context, query models.Consumer) error
-	GetConsumer(ctx context.Context, query models.Consumer) (*models.Consumer, error)
-	GetConsumers(ctx context.Context, query models.Consumer) ([]*models.Consumer, error)
+	CreateOrUpdateConsumer(data *models.Consumer) error
+	DeleteConsumer(query *models.Consumer) error
+	GetConsumer(query *models.Consumer) (*models.Consumer, error)
+	GetConsumers(query *models.Consumer) ([]*models.Consumer, error)
 
-	CreateOrUpdateEvent(ctx context.Context, data models.Event) error
-	DeleteEvent(ctx context.Context, query models.Event) error
-	GetEvent(ctx context.Context, query models.Event) (*models.Event, error)
-	GetEvents(ctx context.Context, query models.Event) ([]*models.Event, error)
-	GetActiveEvents(ctx context.Context) ([]*models.Event, error)
+	CreateOrUpdateEvent(data *models.Event) error
+	DeleteEvent(query *models.Event) error
+	GetEvent(query *models.Event) (*models.Event, error)
+	GetEvents(query *models.Event) ([]*models.Event, error)
+	GetActiveEvents() ([]*models.Event, error)
 
-	CreateOrUpdatePayment(ctx context.Context, data models.Payment) error
-	DeletePayment(ctx context.Context, query models.Payment) error
-	GetPayment(ctx context.Context, query models.Payment) (*models.Payment, error)
-	GetPayments(ctx context.Context, query models.Payment) ([]*models.Payment, error)
+	CreateOrUpdatePayment(data *models.Payment) error
+	DeletePayment(query *models.Payment) error
+	GetPayment(query *models.Payment) (*models.Payment, error)
+	GetPayments(query *models.Payment) ([]*models.Payment, error)
+	GetDistinctPayments() ([]*EventGroup, error)
 
-	CreateOrUpdateBooking(ctx context.Context, data models.Booking) error
-	DeleteBooking(ctx context.Context, query models.Booking) error
-	GetBooking(ctx context.Context, query models.Booking) (*models.Booking, error)
-	GetBookings(ctx context.Context, query models.Booking) ([]*models.Booking, error)
+	CreateOrUpdateBooking(data *models.Booking) error
+	DeleteBooking(query *models.Booking) error
+	GetBooking(query *models.Booking) (*models.Booking, error)
+	GetBookings(query *models.Booking) ([]*models.Booking, error)
 }
 
 // New creates a new Database instance for repository
-func New() (Repository, error) {
-	dns := utils.MustGetEnv("DATABASE_DNS")
+func New(kind DBKind) (Repository, error) {
 
-	db, err := gorm.Open(postgres.Open(dns), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Warn),
-		NowFunc: func() time.Time {
-			return time.Now().Local()
-		},
-		DisableForeignKeyConstraintWhenMigrating: true,
-	})
+	db, err := &gorm.DB{}, error(nil)
 
-	if err != nil {
-		return nil, fmt.Errorf("failed to connect to database: %w", err)
+	switch kind {
+	case Postgres:
+		dns := utils.MustGetEnv("DATABASE_DNS")
+		db, err = gorm.Open(postgres.Open(dns), &gorm.Config{})
+		if err != nil {
+			return nil, err
+		}
+		break
+	default:
+		db, err = gorm.Open(sqlite.Open("file::memory:?cache=shared"), &gorm.Config{})
+		if err != nil {
+			return nil, err
+		}
+		break
 	}
 
 	err = db.AutoMigrate(
@@ -105,9 +119,10 @@ func New() (Repository, error) {
 	}
 
 	// create trigger
-	err = db.Exec(triggerQuery).Error
-	if err != nil {
-		return nil, fmt.Errorf("failed to create trigger: %w", err)
+	if kind == Postgres {
+		if err := db.Exec(triggerQuery).Error; err != nil {
+			return nil, fmt.Errorf("failed to create trigger: %w", err)
+		}
 	}
 
 	return &impl{db}, nil
