@@ -50,3 +50,25 @@ func RenameFile(oldName, newName string) string {
 	re := regexp.MustCompile(`(.*)\.([a-zA-Z]+)$`)
 	return re.ReplaceAllString(oldName, fmt.Sprintf("%s.%s", newName, ext))
 }
+
+// ParseMobile ...
+func ParseMobile(phone string) (string, error) {
+
+	// replace all non digits with empty string
+	reg := regexp.MustCompile("[^0-9]+")
+	phone = reg.ReplaceAllString(phone, "")
+
+	rex := regexp.MustCompile(`^0`)
+	phone = rex.ReplaceAllString(phone, "254")
+
+	// if length is 9 add 254
+	if len(phone) == 9 {
+		phone = "254" + phone
+	}
+
+	if len(phone) != 12 {
+		return "", fmt.Errorf("invalid phone number")
+	}
+
+	return phone, nil
+}

@@ -4,8 +4,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/dongri/phonenumber"
 	"github.com/ochom/event-utils/auth"
+	"github.com/ochom/event-utils/utils"
 	"gorm.io/gorm"
 )
 
@@ -54,9 +54,14 @@ type Consumer struct {
 }
 
 // SetMobile sets the mobile number to kenyan mobile format 254 ...
-func (c *Consumer) SetMobile(phone string) {
-	phone = phonenumber.Parse(phone, "KE")
+func (c *Consumer) SetMobile(phone string) error {
+	phone, err := utils.ParseMobile(phone)
+	if err != nil {
+		return err
+	}
+
 	c.Mobile = phone
+	return nil
 }
 
 // SetPIN hash pin and update
