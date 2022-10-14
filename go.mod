@@ -3,13 +3,11 @@ module github.com/ochom/event-utils
 go 1.18
 
 require (
-	github.com/dongri/phonenumber v0.0.0-20220808001537-be17ad0b5144
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.3.0
 	github.com/ochom/go-http v1.0.0
-	github.com/ochom/sdp-lib v0.2.6
 	github.com/stretchr/testify v1.7.1
 	golang.org/x/crypto v0.0.0-20220214200702-86341886e292
 	gorm.io/datatypes v1.0.6

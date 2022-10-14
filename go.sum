@@ -20,8 +20,6 @@ github.com/denisenkom/go-mssqldb v0.12.0/go.mod h1:iiK0YP1ZeepvmBQk/QpLEhhTNJgfz
 github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f h1:lO4WD4F/rVNCu3HqELle0jiPLLBs70cWOduZpkS1E78=
 github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f/go.mod h1:cuUVRXasLTGF7a8hSLbxyZXjz+1KgoB3wDUb6vlszIc=
 github.com/dnaeon/go-vcr v1.2.0/go.mod h1:R4UdLID7HZT3taECzJs4YgbbH6PIGXB6W/sc5OLb6RQ=
-github.com/dongri/phonenumber v0.0.0-20220808001537-be17ad0b5144 h1:q1WqvGh9kiF4FaSzUXB/u4+qs+RXb5trZp7j5GcrNQ8=
-github.com/dongri/phonenumber v0.0.0-20220808001537-be17ad0b5144/go.mod h1:G6eIK4UOT7iAcInROB6it2kRqlpR1U1GD2gqR9U5bGs=
 github.com/fsnotify/fsnotify v1.4.9 h1:hsms1Qyu0jgnwNXIxa+/V/PDsU6CfLf6CNO8H7IWoS4=
 github.com/gin-contrib/sse v0.1.0 h1:Y/yl/+YNO8GZSjAhjMsSuLt29uWRFHdHYUb5lYOV9qE=
 github.com/gin-contrib/sse v0.1.0/go.mod h1:RHrZQHXnP2xjPF+u1gW/2HnVO7nvIa9PG3Gm+fLHvGI=
@@ -159,8 +157,6 @@ github.com/modocache/gover v0.0.0-20171022184752-b58185e213c5/go.mod h1:caMODM3P
 github.com/nxadm/tail v1.4.8 h1:nPr65rt6Y5JFSKQO7qToXr7pePgD6Gwiw05lkbyAQTE=
 github.com/ochom/go-http v1.0.0 h1:4+2/+w7QafOo/dtcuBVo5Lk03r6psibkkGQc97ADxmw=
 github.com/ochom/go-http v1.0.0/go.mod h1:NDgbyM8dXYWeUxI/NUMhDq0FVayrlTA/M2fMDKWSudo=
-github.com/ochom/sdp-lib v0.2.6 h1:vMUUh8EK/pyBlpnMmAOW1835SFIv4r/TCYdQz/yF404=
-github.com/ochom/sdp-lib v0.2.6/go.mod h1:j62q+eMq1MeUD87tG7Y+2ySOACpP1MvNs540upHZ+3Q=
 github.com/onsi/ginkgo v1.16.5 h1:8xi0RTUf59SOSfEtZMvwTvXYMzG4gV23XVHOZiXNtnE=
 github.com/onsi/gomega v1.18.1 h1:M1GfJqGRrBrrGGsbxzV5dqM2U2ApXefZCQpkukxYRLE=
 github.com/pelletier/go-toml/v2 v2.0.1 h1:8e3L2cCQzLFi2CR4g7vGFuFxX7Jl1kKX8gW+iV0GUKU=
